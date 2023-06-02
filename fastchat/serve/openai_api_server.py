@@ -366,6 +366,7 @@ async def create_chat_completion(request: ChatCompletionRequest):
                 index=i,
                 message=ChatMessage(role="assistant", content=content["text"]),
                 finish_reason=content.get("finish_reason", "stop"),
+                logprobs=content.get("logprobs", None)
             )
         )
         task_usage = UsageInfo.parse_obj(content["usage"])

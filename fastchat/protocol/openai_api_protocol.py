@@ -71,6 +71,7 @@ class ChatCompletionResponseChoice(BaseModel):
     index: int
     message: ChatMessage
     finish_reason: Optional[Literal["stop", "length"]]
+    logprobs: Optional[Any] = None
 
 
 class ChatCompletionResponse(BaseModel):

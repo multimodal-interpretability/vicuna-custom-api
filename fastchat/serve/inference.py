@@ -96,6 +96,7 @@ def generate_stream(
         )
 
     past_key_values = out = None
+    all_logits = []
     for i in range(max_new_tokens):
         if i == 0:
             if model.config.is_encoder_decoder:
@@ -140,6 +141,8 @@ def generate_stream(
         if device == "mps":
             # Switch to CPU by avoiding some bugs in mps backend.
             last_token_logits = last_token_logits.float().to("cpu")
+            
+        all_logits.append(last_token_logits.tolist())
 
         if temperature < 1e-5 or top_p < 1e-8:  # greedy
             token = int(torch.argmax(last_token_logits))
@@ -222,6 +225,7 @@ def generate_stream(
             "total_tokens": input_echo_len + i,
         },
         "finish_reason": finish_reason,
+        "logprobs": all_logits
     }
 
     # clean
